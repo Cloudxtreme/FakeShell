@@ -9,13 +9,14 @@
    **/
   var canvasConfig = {
     id: 'fakeshell',
-    backgroundColor: '#000',
-    font: {
-      color: '#aaa',
-      height: 20,
-      style: '20px Andale Mono'
+    personalization: {
+      background: '#000',
+      cursor: '#00ff00',
+      font: '20px Andale Mono',
+      text: '#00ff00'
     },
     gutterSize: 10,
+    lineHeight: 20,
     shellChar: '> ',
     height: undefined,
     widht: undefined
@@ -42,19 +43,19 @@
    **/
   function drawCanvas(config, canvas) {
     var context = canvas.getContext('2d');
-    context.fillStyle = config.backgroundColor;
+    context.fillStyle = config.personalization.background;
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    context.fillStyle = config.font.color;
-    context.font = config.font.style;
+    context.fillStyle = config.personalization.text;
+    context.font = config.personalization.font;
     context.textBaseline = 'top';
 
     // Calculates the current line height, that is, the location.height of the active cursor.
     var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : 20 * history.length + canvasConfig.gutterSize;
-    var maxHeight = canvas.height - (canvasConfig.gutterSize * 2) - ((canvas.height - (canvasConfig.gutterSize * 2)) % canvasConfig.font.height);
+    var maxHeight = canvas.height - (canvasConfig.gutterSize * 2) - ((canvas.height - (canvasConfig.gutterSize * 2)) % canvasConfig.lineHeight);
     if (currentLineHeight > maxHeight) {
       history.shift();
-      currentLineHeight -= canvasConfig.font.height;
+      currentLineHeight -= canvasConfig.lineHeight;
     }
 
     // Displays the console history on screen.
@@ -66,6 +67,8 @@
     // Draws the current line at the bottom.
     var textMetrics = context.measureText(activeLine);
     context.fillText(activeLine, config.gutterSize, currentLineHeight);
+
+    context.fillStyle = config.personalization.cursor;
     context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, 20);
 
     // Text doesn't yet wrap.
@@ -75,7 +78,7 @@
     var bit = false;
     blinkingCursorIntervalId = window.setInterval(function () {
       bit = !bit;
-      var color = bit ? config.backgroundColor : config.font.color;
+      var color = bit ? config.personalization.background : config.personalization.cursor;
       context.fillStyle = color;
       context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, 20);
     }, 500);
