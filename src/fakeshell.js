@@ -48,21 +48,29 @@
     context.font = config.font.style;
     context.textBaseline = 'top';
 
-    // Draws the current line at the bottom.
-    var textMetrics = context.measureText(activeLine);
-
-    context.fillText(activeLine, config.gutterSize, config.gutterSize);
-    context.fillRect(config.gutterSize + textMetrics.width, config.gutterSize, 12, 20);
-
     // Draws the history.
     // TODO: draw.
+    var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : 20 * history.length + canvasConfig.gutterSize;
+    console.log('line height: ' + currentLineHeight);
+    for (var i = 0; i < history.length; i++) {
+      var lineHeight = 20 * i + canvasConfig.gutterSize;
+      context.fillText(history[i], config.gutterSize, lineHeight);
+    }
+
+    // Draws the current line at the bottom.
+    var textMetrics = context.measureText(activeLine);
+    context.fillText(activeLine, config.gutterSize, currentLineHeight);
+    context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, 20);
+
+    // Text doesn't yet wrap.
+    // TODO: Add text wrap.
 
     var bit = false;
     blinkingCursorIntervalId = window.setInterval(function () {
       bit = !bit;
       var color = bit ? config.backgroundColor : config.font.color;
       context.fillStyle = color;
-      context.fillRect(config.gutterSize + textMetrics.width, config.gutterSize, 12, 20);
+      context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, 20);
     }, 500);
   }
 
