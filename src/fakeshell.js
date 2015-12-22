@@ -49,8 +49,10 @@
     context.textBaseline = 'top';
 
     // Draws the current line at the bottom.
+    var textMetrics = context.measureText(activeLine);
+
     context.fillText(activeLine, config.gutterSize, config.gutterSize);
-    context.fillRect(config.gutterSize + 24, config.gutterSize, 12, 20);
+    context.fillRect(config.gutterSize + textMetrics.width, config.gutterSize, 12, 20);
 
     // Draws the history.
     // TODO: draw.
@@ -60,7 +62,7 @@
       bit = !bit;
       var color = bit ? config.backgroundColor : config.font.color;
       context.fillStyle = color;
-      context.fillRect(config.gutterSize + 24, config.gutterSize, 12, 20);
+      context.fillRect(config.gutterSize + textMetrics.width, config.gutterSize, 12, 20);
     }, 500);
   }
 
