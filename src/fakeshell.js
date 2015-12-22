@@ -49,6 +49,7 @@
     context.font = config.font.style;
     context.textBaseline = 'top';
 
+    // Calculates the current line height, that is, the location.height of the active cursor.
     var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : 20 * history.length + canvasConfig.gutterSize;
     var maxHeight = canvas.height - (canvasConfig.gutterSize * 2) - ((canvas.height - (canvasConfig.gutterSize * 2)) % canvasConfig.font.height);
     if (currentLineHeight > maxHeight) {
@@ -56,6 +57,7 @@
       currentLineHeight -= canvasConfig.font.height;
     }
 
+    // Displays the console history on screen.
     for (var i = 0; i < history.length; i++) {
       var lineHeight = 20 * i + canvasConfig.gutterSize;
       context.fillText(history[i], config.gutterSize, lineHeight);
@@ -69,6 +71,7 @@
     // Text doesn't yet wrap.
     // TODO: Add text wrap.
 
+    // Interval for a blinking cursor.
     var bit = false;
     blinkingCursorIntervalId = window.setInterval(function () {
       bit = !bit;
@@ -78,6 +81,9 @@
     }, 500);
   }
 
+  /**
+   * Handles the input from a user (e.g. displayable ascii characters).
+   **/
   function inputFromUser(keyCode) {
     window.clearInterval(blinkingCursorIntervalId);
     if (keyCode == 8) {
@@ -89,6 +95,9 @@
     drawCanvas(canvasConfig, canvas);
   }
 
+  /**
+   * Submits a command to be proceed.
+   **/
   function submitCommand() {
     window.clearInterval(blinkingCursorIntervalId);
     history.push(activeLine);
@@ -127,5 +136,6 @@
      }, true);
    }());
 
+  // draws the initial state of the canvas.
   drawCanvas(canvasConfig, canvas);
 } (document, window));
