@@ -12,6 +12,7 @@
     backgroundColor: '#000',
     font: {
       color: '#aaa',
+      height: 20,
       style: '20px Andale Mono'
     },
     gutterSize: 10,
@@ -48,10 +49,13 @@
     context.font = config.font.style;
     context.textBaseline = 'top';
 
-    // Draws the history.
-    // TODO: draw.
     var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : 20 * history.length + canvasConfig.gutterSize;
-    console.log('line height: ' + currentLineHeight);
+    var maxHeight = canvas.height - (canvasConfig.gutterSize * 2) - ((canvas.height - (canvasConfig.gutterSize * 2)) % canvasConfig.font.height);
+    if (currentLineHeight > maxHeight) {
+      history.shift();
+      currentLineHeight -= canvasConfig.font.height;
+    }
+
     for (var i = 0; i < history.length; i++) {
       var lineHeight = 20 * i + canvasConfig.gutterSize;
       context.fillText(history[i], config.gutterSize, lineHeight);
@@ -82,16 +86,14 @@
     } else {
       activeLine += String.fromCharCode(keyCode);
     }
-    console.log(activeLine);
     drawCanvas(canvasConfig, canvas);
   }
 
   function submitCommand() {
     window.clearInterval(blinkingCursorIntervalId);
     history.push(activeLine);
-
-    drawCanvas(canvasConfig, canvas);
     activeLine = canvasConfig.shellChar;
+    drawCanvas(canvasConfig, canvas);
   }
 
   /**
@@ -108,7 +110,7 @@
        if(focusedElement == canvas) {
          var keyCode = e.keyCode;
          switch(keyCode) {
-           case 13: submitCommand();
+           case 13: submitCommand(); break;
            default: inputFromUser(e.keyCode);
          }
        }
@@ -117,7 +119,6 @@
      window.addEventListener('keydown', function (e) {
        if(focusedElement == canvas) {
          var keyCode = e.keyCode;
-         console.log(keyCode);
          switch(keyCode) {
            // Backspace
            case 8: inputFromUser(keyCode);
