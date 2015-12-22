@@ -66,7 +66,12 @@
 
   function inputFromUser(keyCode) {
     window.clearInterval(blinkingCursorIntervalId);
-    activeLine += String.fromCharCode(keyCode);
+    if (keyCode == 8) {
+      // If the keycode is backspace remove the last character
+      activeLine = activeLine.length > 2 ? activeLine.slice(0, -1) : activeLine;
+    } else {
+      activeLine += String.fromCharCode(keyCode);
+    }
     console.log(activeLine);
     drawCanvas(canvasConfig, canvas);
   }
@@ -95,6 +100,17 @@
          switch(keyCode) {
            case 13: submitCommand();
            default: inputFromUser(e.keyCode);
+         }
+       }
+     }, true);
+
+     window.addEventListener('keydown', function (e) {
+       if(focusedElement == canvas) {
+         var keyCode = e.keyCode;
+         console.log(keyCode);
+         switch(keyCode) {
+           // Backspace
+           case 8: inputFromUser(keyCode);
          }
        }
      }, true);
