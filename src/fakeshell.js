@@ -12,9 +12,10 @@
     backgroundColor: '#000',
     font: {
       color: '#aaa',
-      style: '20px Georia'
+      style: '20px Andale Mono'
     },
-    shellChar: '>',
+    gutterSize: 10,
+    shellChar: '> ',
     height: undefined,
     widht: undefined
   }
@@ -26,10 +27,34 @@
   canvas.height = canvasConfig.height || canvas.height;
   canvas.width = canvasConfig.width || canvas.width;
 
+
   /**
-   *
+   * The canvas element is not focusable.  So we'll fake it until they
+   * make it!
+   **/
+   (function() {
+     var focusedElement = canvas;
+     window.addEventListener('mousedown', function(e) {
+       focusedElement = e.target;
+     }, false);
+
+     window.addEventListener('keypress', function (e) {
+       if(focusedElement == canvas) {
+         console.log(e.keyCode);
+         var keyCode = e.keyCode;
+         switch(keyCode) {
+           case 13: submitCommand('test');
+         }
+       }
+     }, true);
+   }());
+
+  /**
+   * This holds the history of output of the shell.
    **/
   var history = [];
+
+  var activeLine = canvasConfig.shellChar;
 
   /**
    * Initializes the initial state of the canvas upon first load or clear.
@@ -42,17 +67,28 @@
 
     context.fillStyle = config.font.color;
     context.font = config.font.style;
-    context.fillText(config.shellChar, 10, 90);
+    context.textBaseline = 'top';
 
-    history.push(config.shellChar);
+    // Draws the current line at the bottom.
+    context.fillText(activeLine, config.gutterSize, config.gutterSize);
+    context.fillRect(config.gutterSize + 24, config.gutterSize, 12, 20);
 
-    context.fillRect(25, 75, 10, 20);
+    // Draws the history.
+    // TODO: draw.
+
+    var bit = false;
+    window.setInterval(function () {
+      bit = !bit;
+      var color = bit ? config.backgroundColor : config.font.color;
+      context.fillStyle = color;
+      context.fillRect(config.gutterSize + 24, config.gutterSize, 12, 20);
+    }, 500);
   }
 
-  function pushLine(line) {
+  function submitCommand(line) {
     var context = {};
-
     history.push(line);
+    drawCanvas(config, canvas);
   }
 
   drawCanvas(canvasConfig, canvas);
