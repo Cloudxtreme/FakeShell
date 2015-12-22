@@ -104,6 +104,8 @@
   function submitCommand() {
     window.clearInterval(blinkingCursorIntervalId);
     history.push(activeLine);
+    var command = activeLine.replace(new RegExp('^' + canvasConfig.shellChar + '\\s*') , '')
+    console.log(command);
     activeLine = canvasConfig.shellChar;
     drawCanvas(canvasConfig, canvas);
   }
