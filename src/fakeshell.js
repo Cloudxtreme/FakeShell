@@ -20,34 +20,14 @@
     widht: undefined
   }
 
+  var blinkingCursorIntervalId = null;
+
   /**
    * The canvas element activing as the display for our shell.
    **/
   var canvas = document.getElementById(canvasConfig.id);
   canvas.height = canvasConfig.height || canvas.height;
   canvas.width = canvasConfig.width || canvas.width;
-
-
-  /**
-   * The canvas element is not focusable.  So we'll fake it until they
-   * make it!
-   **/
-   (function() {
-     var focusedElement = canvas;
-     window.addEventListener('mousedown', function(e) {
-       focusedElement = e.target;
-     }, false);
-
-     window.addEventListener('keypress', function (e) {
-       if(focusedElement == canvas) {
-         console.log(e.keyCode);
-         var keyCode = e.keyCode;
-         switch(keyCode) {
-           case 13: submitCommand('test');
-         }
-       }
-     }, true);
-   }());
 
   /**
    * This holds the history of output of the shell.
@@ -60,7 +40,6 @@
    * Initializes the initial state of the canvas upon first load or clear.
    **/
   function drawCanvas(config, canvas) {
-
     var context = canvas.getContext('2d');
     context.fillStyle = config.backgroundColor;
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -77,7 +56,7 @@
     // TODO: draw.
 
     var bit = false;
-    window.setInterval(function () {
+    blinkingCursorIntervalId = window.setInterval(function () {
       bit = !bit;
       var color = bit ? config.backgroundColor : config.font.color;
       context.fillStyle = color;
@@ -85,11 +64,41 @@
     }, 500);
   }
 
-  function submitCommand(line) {
-    var context = {};
-    history.push(line);
-    drawCanvas(config, canvas);
+  function inputFromUser(keyCode) {
+    window.clearInterval(blinkingCursorIntervalId);
+    activeLine += String.fromCharCode(keyCode);
+    console.log(activeLine);
+    drawCanvas(canvasConfig, canvas);
   }
+
+  function submitCommand() {
+    window.clearInterval(blinkingCursorIntervalId);
+    history.push(activeLine);
+
+    drawCanvas(canvasConfig, canvas);
+    activeLine = canvasConfig.shellChar;
+  }
+
+  /**
+   * The canvas element is not focusable.  So we'll fake it until they
+   * make it!
+   **/
+   (function() {
+     var focusedElement = canvas;
+     window.addEventListener('mousedown', function(e) {
+       focusedElement = e.target;
+     }, false);
+
+     window.addEventListener('keypress', function (e) {
+       if(focusedElement == canvas) {
+         var keyCode = e.keyCode;
+         switch(keyCode) {
+           case 13: submitCommand();
+           default: inputFromUser(e.keyCode);
+         }
+       }
+     }, true);
+   }());
 
   drawCanvas(canvasConfig, canvas);
 } (document, window));
