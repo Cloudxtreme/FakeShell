@@ -147,7 +147,12 @@
 
      window.addEventListener('touchstart', function(e) {
        focusedElement = e.target;
-       document.getElementById('MobileInput').focus();
+       var mobileInput = document.getElementById('MobileInput');
+       mobileInput.trigger('touchstart');
+       mobilInput.addEventListener('touchstart', function(e) {
+         e.target.focus();
+       })
+
      }, false);
 
      window.addEventListener('mousedown', function(e) {
