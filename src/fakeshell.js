@@ -145,16 +145,6 @@
    (function() {
      var focusedElement = canvas;
 
-     window.addEventListener('touchstart', function(e) {
-       focusedElement = e.target;
-       var mobileInput = document.getElementById('MobileInput');
-       mobileInput.trigger('touchstart');
-       mobilInput.addEventListener('touchstart', function(e) {
-         e.target.focus();
-       })
-
-     }, false);
-
      window.addEventListener('mousedown', function(e) {
        focusedElement = e.target;
      }, false);
