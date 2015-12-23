@@ -67,15 +67,15 @@
         history.push('   -repository:    # git repository url');
         history.push('   -version:       # display version');
         history.push('');
-        history.push('------------');
-        history.push('Plugin             Description');
+        history.push('   ------------');
+        history.push('   Plugin             Description');
 
         for(var propertyName in shell.$PATH) {
           if(shell.$PATH.hasOwnProperty(propertyName)) {
             var command = shell.$PATH[propertyName];
             var padding = "                   ";
             padding = padding.slice(0, command.name.length  * -1);
-            history.push(command.name + padding + command.description);
+            history.push('   ' + command.name + padding + command.description);
           }
         }
         break;
