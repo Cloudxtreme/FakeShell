@@ -165,6 +165,7 @@
          switch(keyCode) {
            // Backspace
            case 8: inputFromUser(keyCode);
+           e.preventDefault();
          }
        }
      }, true);
