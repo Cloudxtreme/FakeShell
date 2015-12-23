@@ -56,13 +56,7 @@
     context.font = config.personalization.font;
     context.textBaseline = 'top';
 
-    // Calculates the current line height, that is, the location.height of the active cursor.
-    var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : canvasConfig.lineHeight * history.length + canvasConfig.gutterSize;
-    var maxHeight = canvas.height - (canvasConfig.gutterSize * 2) - ((canvas.height - (canvasConfig.gutterSize * 2)) % canvasConfig.lineHeight);
-    if (currentLineHeight > maxHeight) {
-      history.shift();
-      currentLineHeight -= canvasConfig.lineHeight;
-    }
+    var currentLineHeight = fixHistoryOverflow();
 
     // Displays the console history on screen.
     for (var i = 0; i < history.length; i++) {
@@ -122,6 +116,25 @@
 
     activeLine = canvasConfig.shellChar;
     drawCanvas(canvasConfig, canvas);
+  }
+
+  /**
+   * This violates Single Responsibility Principle (for now).
+   *
+   * This clear the history that won't show on the display (old history) and it
+   * recalculates the currentLineHeight to print the next line on screen.
+   **/
+  function fixHistoryOverflow() {
+    // Calculates the current line height, that is, the location.height of the active cursor.
+    var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : canvasConfig.lineHeight * history.length + canvasConfig.gutterSize;
+    var maxHeight = canvas.height - (canvasConfig.gutterSize * 2) - ((canvas.height - (canvasConfig.gutterSize * 2)) % canvasConfig.lineHeight);
+    if (currentLineHeight > maxHeight) {
+      history.shift();
+      currentLineHeight -= canvasConfig.lineHeight;
+      currentLineHeight = clearOldHistory();
+    }
+
+    return currentLineHeight;
   }
 
   /**
