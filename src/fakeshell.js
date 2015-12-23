@@ -4,6 +4,9 @@
  * shell.  It is meant for a fun UI component with limited features.
  **/
 (function (document, window) {
+
+  window.shell= window.shell || { $PATH: {} };
+
   /**
    * The configuration variables for our canvas element.
    **/
@@ -20,7 +23,7 @@
     shellChar: '> ',
     height: undefined,
     widht: undefined
-  }
+  };
 
   var blinkingCursorIntervalId = null;
 
@@ -36,6 +39,9 @@
    **/
   var history = [];
 
+  /**
+   * This is the line accepting active input from the user.
+   **/
   var activeLine = canvasConfig.shellChar;
 
   /**
@@ -104,8 +110,14 @@
   function submitCommand() {
     window.clearInterval(blinkingCursorIntervalId);
     history.push(activeLine);
+    // removes shell characters and unneccessary white space to process command.
     var command = activeLine.replace(new RegExp('^' + canvasConfig.shellChar + '\\s*') , '')
-    console.log(command);
+
+    // TODO: Process command.
+    if (typeof window.shell.$PATH[command] == 'function') {
+      history = window.shell.$PATH[command](history);
+    }
+
     activeLine = canvasConfig.shellChar;
     drawCanvas(canvasConfig, canvas);
   }
@@ -143,4 +155,5 @@
 
   // draws the initial state of the canvas.
   drawCanvas(canvasConfig, canvas);
+  window.shell = shell;
 } (document, window));
