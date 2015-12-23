@@ -1,14 +1,35 @@
+/**
+ * These are all of the common utilities for FakeShell.js.  For fakeshell
+ * to reliably display all the plug-ins you should register this javascript
+ * file last.  It will iterate $PATH to display plug-ins in the -help section.
+ **/
 (function (window) {
   var shell = window.shell || {};
   shell.$PATH = shell.$PATH || {};
-  
+
   // These commands need to be all lower casing. We are calling them
   // using toLowerCase().
-  shell.$PATH.cd = changeDirectory;
-  shell.$PATH.clear = clearScreen;
-  shell.$PATH.cls = clearScreen;
-  shell.$PATH.ls = listing;
-  shell.$PATH.fakeshell = fakeShell;
+  shell.$PATH.cd = {
+    execute: changeDirectory,
+    name: 'cd',
+    description: 'Website navigation.'
+  };
+  shell.$PATH.clear = {
+    execute: clearScreen,
+    name: 'clear (alias cls)',
+    description: 'Clears the screen.'
+  };
+  shell.$PATH.cls = shell.$PATH.clear;
+  shell.$PATH.ls = {
+    execute: listing,
+    name: 'ls',
+    description: "Lists the available pages to navigate."
+  };
+  shell.$PATH.fakeshell = {
+    execute: fakeShell,
+    name: 'fakeshell',
+    description: 'Provides information about shell.'
+  };
   window.shell = shell;
 
   function changeDirectory(history, args) {
@@ -45,7 +66,18 @@
         history.push('   -help:          # list commands and display help');
         history.push('   -repository:    # git repository url');
         history.push('   -version:       # display version');
-        // TODO: display a list of available plugins.
+        history.push('');
+        history.push('------------');
+        history.push('Plugin             Description');
+
+        for(var propertyName in shell.$PATH) {
+          if(shell.$PATH.hasOwnProperty(propertyName)) {
+            var command = shell.$PATH[propertyName];
+            var padding = "                   ";
+            padding = padding.slice(0, command.name.length  * -1);
+            history.push(command.name + padding + command.description);
+          }
+        }
         break;
       case '-repository':
         history.push("   Git Repository: https://github.com/sgmeyer/FakeShell");

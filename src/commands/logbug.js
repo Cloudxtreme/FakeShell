@@ -9,10 +9,14 @@
   shell.$PATH = shell.$PATH || {};
   // These commands need to be all lower casing. We are calling them
   // using toLowerCase().
-  shell.$PATH.logbug = logbug;
+  shell.$PATH.logbug = {
+    execute: logBug,
+    name: 'logbug',
+    description: 'Navigation for logging bugs.'
+  };;
   window.shell = shell;
 
-  function logbug(history, args) {
+  function logBug(history, args) {
     if (args.length < 1) { args.push('-help'); }
 
     switch(args[0].toLowerCase()) {

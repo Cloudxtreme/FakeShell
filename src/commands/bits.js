@@ -5,10 +5,15 @@
 
 (function (window) {
   var shell = window.shell || {};
-  shell.$PATH = shell.$PATH || {};
+  shell.$PATH = shell.$PATH || [];
   // These commands need to be all lower casing. We are calling them
   // using toLowerCase().
-  shell.$PATH.bits = bits;
+  shell.$PATH.bits = {
+    execute: bits,
+    name: 'bits',
+    description: 'He does not do much here, but he is my hubot.'
+  };
+
   window.shell = shell;
 
   function bits(history, args) {
