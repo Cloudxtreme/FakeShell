@@ -146,6 +146,7 @@
      var focusedElement = canvas;
      window.addEventListener('mousedown', function(e) {
        focusedElement = e.target;
+       document.getElementById('MobileInput').focus();
      }, false);
 
      window.addEventListener('keypress', function (e) {
