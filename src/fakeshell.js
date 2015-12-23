@@ -144,9 +144,14 @@
    **/
    (function() {
      var focusedElement = canvas;
-     window.addEventListener('mousedown', function(e) {
+
+     window.addEventListener('touchstart', function(e) {
        focusedElement = e.target;
        document.getElementById('MobileInput').focus();
+     }, false);
+
+     window.addEventListener('mousedown', function(e) {
+       focusedElement = e.target;
      }, false);
 
      window.addEventListener('keypress', function (e) {
