@@ -115,7 +115,7 @@
     var commands = commandInput.split(' ');
 
     // TODO: Process command.
-    if (typeof window.shell.$PATH[commands[0]] == 'function') {
+    if (typeof window.shell.$PATH[commands[0].toLowerCase()] == 'function') {
       var args = commands.length > 1 ? commands.slice(1) : [];
       history = window.shell.$PATH[commands[0]](history, args);
     }
