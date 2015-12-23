@@ -15,7 +15,7 @@
     personalization: {
       background: '#000',
       cursor: '#00ff00',
-      font: '20px Andale Mono',
+      font: '20px monospace',
       text: '#00ff00'
     },
     gutterSize: 10,
