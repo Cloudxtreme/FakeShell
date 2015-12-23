@@ -111,11 +111,13 @@
     window.clearInterval(blinkingCursorIntervalId);
     history.push(activeLine);
     // removes shell characters and unneccessary white space to process command.
-    var command = activeLine.replace(new RegExp('^' + canvasConfig.shellChar + '\\s*') , '')
+    var commandInput = activeLine.replace(new RegExp('^' + canvasConfig.shellChar + '\\s*') , '')
+    var commands = commandInput.split(' ');
 
     // TODO: Process command.
-    if (typeof window.shell.$PATH[command] == 'function') {
-      history = window.shell.$PATH[command](history);
+    if (typeof window.shell.$PATH[commands[0]] == 'function') {
+      var args = commands.length > 1 ? commands.slice(1) : [];
+      history = window.shell.$PATH[commands[0]](history, args);
     }
 
     activeLine = canvasConfig.shellChar;
