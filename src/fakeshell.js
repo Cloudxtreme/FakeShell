@@ -21,8 +21,8 @@
     gutterSize: 10,
     lineHeight: 20,
     shellChar: '> ',
-    height: undefined,
-    widht: undefined
+    height: window.innerHeight * .75,
+    width: window.innerWidth * .95
   };
 
   var blinkingCursorIntervalId = null;
@@ -57,7 +57,7 @@
     context.textBaseline = 'top';
 
     // Calculates the current line height, that is, the location.height of the active cursor.
-    var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : 20 * history.length + canvasConfig.gutterSize;
+    var currentLineHeight = history.length <= 0 ? canvasConfig.gutterSize : canvasConfig.lineHeight * history.length + canvasConfig.gutterSize;
     var maxHeight = canvas.height - (canvasConfig.gutterSize * 2) - ((canvas.height - (canvasConfig.gutterSize * 2)) % canvasConfig.lineHeight);
     if (currentLineHeight > maxHeight) {
       history.shift();
@@ -66,7 +66,7 @@
 
     // Displays the console history on screen.
     for (var i = 0; i < history.length; i++) {
-      var lineHeight = 20 * i + canvasConfig.gutterSize;
+      var lineHeight = canvasConfig.lineHeight * i + canvasConfig.gutterSize;
       context.fillText(history[i], config.gutterSize, lineHeight);
     }
 
@@ -75,7 +75,7 @@
     context.fillText(activeLine, config.gutterSize, currentLineHeight);
 
     context.fillStyle = config.personalization.cursor;
-    context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, 20);
+    context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, canvasConfig.lineHeight);
 
     // Text doesn't yet wrap.
     // TODO: Add text wrap.
@@ -86,7 +86,7 @@
       bit = !bit;
       var color = bit ? config.personalization.background : config.personalization.cursor;
       context.fillStyle = color;
-      context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, 20);
+      context.fillRect(config.gutterSize + textMetrics.width, currentLineHeight, 12, canvasConfig.lineHeight);
     }, 500);
   }
 

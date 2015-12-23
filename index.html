@@ -1,9 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>FakeShell.js</title>
+  <style>
+    #fakeshell, div {
+      padding: 0;
+      margin: auto;
+      display: block;
+    }
+  </style>
 </head>
 <body>
-  <canvas id="fakeshell" width="800" height="510"></canvas>
+  <div>
+    <h1>FakeShell.js</h1>
+    <h2>About</h2>
+    <p>
+      FakeShell.js is a fun javascript and web based command shell.  It is not
+      intended to be a full featured command shell.  This was designed to add
+      to a website in a hero or jumbotron component.  The javascript can extended
+      to add more functionality by adding more code to src/commands.
+    </p>
+  <div>
+
+  <canvas id="fakeshell"></canvas>
+
 
   <script src="src/fakeshell.js"></script>
   <script src="src/commands/common-utils.js"></script>
