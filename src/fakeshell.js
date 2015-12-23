@@ -109,9 +109,10 @@
     var commands = commandInput.split(' ');
 
     // TODO: Process command.
-    if (typeof window.shell.$PATH[commands[0].toLowerCase()] == 'function') {
+    var command = commands[0].toLowerCase();
+    if (typeof window.shell.$PATH[command] == 'function') {
       var args = commands.length > 1 ? commands.slice(1) : [];
-      history = window.shell.$PATH[commands[0].toLowerCase()](history, args);
+      history = window.shell.$PATH[command](history, args);
     }
 
     activeLine = canvasConfig.shellChar;
