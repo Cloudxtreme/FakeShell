@@ -111,7 +111,7 @@
     // TODO: Process command.
     if (typeof window.shell.$PATH[commands[0].toLowerCase()] == 'function') {
       var args = commands.length > 1 ? commands.slice(1) : [];
-      history = window.shell.$PATH[commands[0]](history, args);
+      history = window.shell.$PATH[commands[0].toLowerCase()](history, args);
     }
 
     activeLine = canvasConfig.shellChar;
@@ -169,6 +169,10 @@
    }());
 
   // draws the initial state of the canvas.
-  drawCanvas(canvasConfig, canvas);
+  window.onload = function() {
+    window.shell.init(history);
+    drawCanvas(canvasConfig, canvas);
+  };
+
   window.shell = shell;
 } (document, window));

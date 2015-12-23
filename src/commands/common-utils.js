@@ -1,5 +1,7 @@
 (function (window) {
   var shell = window.shell || {};
+  shell.$PATH = shell.$PATH || {};
+  
   // These commands need to be all lower casing. We are calling them
   // using toLowerCase().
   shell.$PATH.cd = changeDirectory;
