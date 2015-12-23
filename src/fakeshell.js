@@ -131,7 +131,7 @@
     if (currentLineHeight > maxHeight) {
       history.shift();
       currentLineHeight -= canvasConfig.lineHeight;
-      currentLineHeight = clearOldHistory();
+      currentLineHeight = fixHistoryOverflow();
     }
 
     return currentLineHeight;
